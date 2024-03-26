@@ -40,12 +40,13 @@ jobs:
         run: |
           gcloud artifacts repositories create ${{ vars.REPOSITORY_NAME }} --location=${{ vars.LOCATION }} --repository-format=docker
       
-      - name: Build and push Docker image
+      - name: Build Docker image
         run: |
-          docker build -t gcr.io/${{ vars.PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}:${{ github.sha }} .
-          docker push gcr.io/${{ vars.PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}:${{ github.sha }}
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_CI_SERVICE_ACCOUNT_KEY }}
-          PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-          REPOSITORY_NAME: ${{ secrets.REPOSITORY_NAME }}
-          LOCATION: ${{ secrets.LOCATION }}
+          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}:${{ github.sha }} .
+      
+      - name: Push Docker image to Artifact Registry
+        run: docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}:${{ github.sha }}
+
+        
+
+        
