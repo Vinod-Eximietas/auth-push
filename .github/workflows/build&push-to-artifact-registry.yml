@@ -44,7 +44,7 @@ jobs:
         run: |
           gcloud auth configure-docker
           # docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}:${{ github.sha }} .
-          docker build -t ${{ vars.REPOSITORY_NAME }}
+          docker build -t ${{ vars.REPOSITORY_NAME }} .
           docker tag "${{  vars.REPOSITORY_NAME }}" gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}:${{ github.sha }}
           docker tag "${{ vars.REPOSITORY_NAME}}" gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}:latest
       
