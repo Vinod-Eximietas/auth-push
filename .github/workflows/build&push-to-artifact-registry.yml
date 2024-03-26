@@ -48,4 +48,4 @@ jobs:
       
       - name: Push Docker image to Artifact Registry
         run: |
-          docker push ${{ secrets.GCP_PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}:latest
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}:latest
