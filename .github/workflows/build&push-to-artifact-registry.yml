@@ -28,21 +28,24 @@ jobs:
       - name: Check if the repository exists
         id: check_repo
         run: |
-          if gcloud artifacts repositories describe test --location=us-central1 >/dev/null 2>&1; then
+          if gcloud artifacts repositories describe ${{ vars.REPOSITORY_NAME }} --location=${{ vars.LOCATION }} >/dev/null 2>&1; then
             echo "::set-output name=exists::true"
           else
             echo "::set-output name=exists::false"
           fi
         continue-on-error: true
-
+      
       - name: Create the repository if it doesn't exist
         if: steps.check_repo.outputs.exists == 'false'
         run: |
-          gcloud artifacts repositories create test --location=us-central1 --repository-format=docker
-
-
-      - name: Build Docker image
-        run: docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/test:latest .
-
-      - name: Push Docker image to Artifact Registry
-        run: docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/test:latest
+          gcloud artifacts repositories create ${{ vars.REPOSITORY_NAME }} --location=${{ vars.LOCATION }} --repository-format=docker
+      
+      - name: Build and push Docker image
+        run: |
+          docker build -t gcr.io/${{ vars.PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}:${{ github.sha }} .
+          docker push gcr.io/${{ vars.PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}:${{ github.sha }}
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+          PROJECT_ID: ${{ secrets.PROJECT_ID }}
+          REPOSITORY_NAME: ${{ secrets.REPOSITORY_NAME }}
+          LOCATION: ${{ secrets.LOCATION }}
