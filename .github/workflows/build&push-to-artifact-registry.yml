@@ -46,6 +46,6 @@ jobs:
           docker push gcr.io/${{ vars.PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}:${{ github.sha }}
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_CI_SERVICE_ACCOUNT_KEY }}
-          PROJECT_ID: ${{ secrets.PROJECT_ID }}
+          PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
           REPOSITORY_NAME: ${{ secrets.REPOSITORY_NAME }}
           LOCATION: ${{ secrets.LOCATION }}
