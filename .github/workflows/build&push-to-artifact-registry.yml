@@ -5,7 +5,7 @@ on:
     workflows: ["Authenticate with GCP"]
     types:
       - completed
- 
+
 jobs:
   push:
     runs-on: ubuntu-latest
@@ -34,23 +34,18 @@ jobs:
             echo "::set-output name=exists::false"
           fi
         continue-on-error: true
-      
+
       - name: Create the repository if it doesn't exist
         if: steps.check_repo.outputs.exists == 'false'
         run: |
           gcloud artifacts repositories create ${{ vars.REPOSITORY_NAME }} --location=${{ vars.LOCATION }} --repository-format=docker
-      
-      - name: Generate random image name
-        id: generate_image_name
-        run: |
-          echo "::set-output name=image_name::my-image-$(date +%s)"
 
       - name: Build Docker image
         run: |
-          docker build -t ${{ steps.generate_image_name.outputs.image_name }} .
-          docker tag ${{ steps.generate_image_name.outputs.image_name }} gcr.io/${{ secrets.GCP_PROJECT_ID }}/hello:${{ github.sha }}
-          docker tag ${{ steps.generate_image_name.outputs.image_name }} gcr.io/${{ secrets.GCP_PROJECT_ID }}/hello:latest
-      
+          docker build -t myimage .
+          docker tag myimage gcr.io/${{ secrets.GCP_PROJECT_ID }}/hello:${{ github.sha }}
+          docker tag myimage gcr.io/${{ secrets.GCP_PROJECT_ID }}/hello:latest
+
       - name: Push Docker image to Artifact Registry
         run: |
           docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/hello:latest
