@@ -40,12 +40,12 @@ jobs:
         run: |
           gcloud artifacts repositories create ${{ vars.REPOSITORY_NAME }} --location=${{ vars.LOCATION }} --repository-format=docker
 
-      - name: Build Docker image
-        run: |
-          docker build -t myimage .
-          docker tag myimage gcr.io/${{ secrets.GCP_PROJECT_ID }}/hello:${{ github.sha }}
-          docker tag myimage gcr.io/${{ secrets.GCP_PROJECT_ID }}/hello:latest
+      # - name: Build Docker image
+      #   run: |
+      #     docker build -t myimage .
+      #     docker tag myimage gcr.io/${{ secrets.GCP_PROJECT_ID }}/hello:${{ github.sha }}
+      #     docker tag myimage gcr.io/${{ secrets.GCP_PROJECT_ID }}/hello:latest
 
-      - name: Push Docker image to Artifact Registry
-        run: |
-          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/hello:latest
+      # - name: Push Docker image to Artifact Registry
+      #   run: |
+      #     docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/hello:latest
