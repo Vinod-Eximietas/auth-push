@@ -53,19 +53,19 @@ jobs:
       #     gcloud auth configure-docker
       #     # docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}:${{ github.sha }}
       #     docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}:latest
-    - name: Build Docker image
-      run: |
-        gcloud auth configure-docker
-        # docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}:${{ github.sha }} .
-        docker build -t ${{ vars.REPOSITORY_NAME }} .
-        docker tag "${{  vars.REPOSITORY_NAME }}" gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}:${{ github.sha }}
-        docker tag "${{ vars.REPOSITORY_NAME}}" gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}:latest
-    
-    - name: Push Docker image to Artifact Registry
-      run: |
-        gcloud auth configure-docker
-        # docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}:${{ github.sha }}
-        docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}:latest
+      - name: Build Docker image
+        run: |
+          gcloud auth configure-docker
+          # docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}:${{ github.sha }} .
+          docker build -t ${{ vars.REPOSITORY_NAME }} .
+          docker tag "${{  vars.REPOSITORY_NAME }}" gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}:${{ github.sha }}
+          docker tag "${{ vars.REPOSITORY_NAME}}" gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}:latest
+      
+      - name: Push Docker image to Artifact Registry
+        run: |
+          gcloud auth configure-docker
+          # docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}:${{ github.sha }}
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}:latest
 
 
       
