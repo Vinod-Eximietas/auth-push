@@ -41,8 +41,8 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-image:latest .
+          docker build -t docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-image:   .
           
       - name: Push Docker image to Artifact Registry
         run: |
-          docker push docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}/my-image:latest
+          docker push -docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}/my-image:latest
