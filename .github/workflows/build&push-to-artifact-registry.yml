@@ -21,6 +21,11 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_CI_SERVICE_ACCOUNT_KEY }}
 
+      - name: Debug gcloud configuration
+        run: |
+          gcloud auth list
+          gcloud config list
+
       - name: Configure Docker to use gcloud as a credential helper
         run: |
           gcloud auth configure-docker
