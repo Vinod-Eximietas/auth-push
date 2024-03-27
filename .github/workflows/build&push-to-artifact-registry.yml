@@ -35,10 +35,10 @@ jobs:
           fi
         continue-on-error: true
       
-      # - name: Create the repository if it doesn't exist
-      #   if: steps.check_repo.outputs.exists == 'false'
-      #   run: |
-      #     gcloud artifacts repositories create ${{ vars.REPOSITORY_NAME }} --location=${{ vars.LOCATION }} --repository-format=docker
+      - name: Create the repository if it doesn't exist
+        if: steps.check_repo.outputs.exists == 'false'
+        run: |
+          gcloud artifacts repositories create ${{ vars.REPOSITORY_NAME }} --location=${{ vars.LOCATION }} --repository-format=docker
       
       - name: Build Docker image
         run: |
