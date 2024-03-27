@@ -29,4 +29,3 @@ jobs:
       - name: Push Docker image to Artifact Registry
         run: |
           docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-image:latest
-        continue-on-error: true  # Continue on error to ensure workflow doesn't fail if push fails
