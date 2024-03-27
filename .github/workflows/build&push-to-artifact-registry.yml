@@ -19,8 +19,10 @@ jobs:
           service_account_key: ${{ secrets.GCP_CI_SERVICE_ACCOUNT_KEY }}
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
-      - name: Authenticate with Google Cloud
-        run: gcloud auth configure-docker gcr.io
+      - name: Authenticate with Google Cloud for Docker
+        run: |
+          gcloud auth configure-docker gcr.io
+
 
       - name: Build Docker image
         run: |
