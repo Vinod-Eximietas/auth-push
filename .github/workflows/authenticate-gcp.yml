@@ -1,6 +1,9 @@
 name: Authenticate with GCP
 
-
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   authenticate:
