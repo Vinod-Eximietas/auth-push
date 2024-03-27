@@ -1,19 +1,57 @@
-name: Authenticate with GCP
+name: Push Docker Image to Artifact Registry
 
 on:
-  push:
-    branches:
-      - main
-
+  workflow_run:
+    workflows: ["Authenticate with GCP"]
+    types:
+      - completed
+ 
 jobs:
-  authenticate:
+  push:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
       - name: Set up Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v0
+        uses: google-github-actions/setup-gcloud@v1
+
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v1
         with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_CI_SERVICE_ACCOUNT_KEY }}
+          credentials_json: ${{ secrets.GCP_CI_SERVICE_ACCOUNT_KEY }}
+
+      - name: Configure Docker to use gcloud as a credential helper
+        run: |
+          gcloud auth configure-docker
+
+      - name: Check if the repository exists
+        id: check_repo
+        run: |
+          if gcloud artifacts repositories describe ${{ vars.REPOSITORY_NAME }} --location=${{ vars.LOCATION }} >/dev/null 2>&1; then
+            echo "::set-output name=exists::true"
+          else
+            echo "::set-output name=exists::false"
+          fi
+        continue-on-error: true
+      
+      # - name: Create the repository if it doesn't exist
+      #   if: steps.check_repo.outputs.exists == 'false'
+      #   run: |
+      #     gcloud artifacts repositories create ${{ vars.REPOSITORY_NAME }} --location=${{ vars.LOCATION }} --repository-format=docker
+      
+      - name: Build Docker image
+        run: |
+          gcloud auth configure-docker
+          # docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}:${{ github.sha }} .
+          docker build -t ${{ vars.REPOSITORY_NAME }} .
+          docker tag "${{  vars.REPOSITORY_NAME }}" gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}:${{ github.sha }}
+          docker tag "${{ vars.REPOSITORY_NAME}}" gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}:latest
+      
+      - name: Push Docker image to Artifact Registry
+        run: |
+          gcloud auth configure-docker
+          # docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}:${{ github.sha }}
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}:latest
+
+  
