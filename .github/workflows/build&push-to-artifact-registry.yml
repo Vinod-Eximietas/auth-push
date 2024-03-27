@@ -15,34 +15,17 @@ jobs:
 
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
+        with:
+          service_account_key: ${{ secrets.GCP_CI_SERVICE_ACCOUNT_KEY }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
 
       - name: Authenticate with Google Cloud
-        uses: google-github-actions/auth@v1
-        with:
-          credentials_json: ${{ secrets.GCP_CI_SERVICE_ACCOUNT_KEY }}
-
-      - name: Debug gcloud configuration
-        run: |
-          gcloud auth list
-          gcloud config list
-
-      - name: Configure Docker to use gcloud as a credential helper
-        run: |
-          gcloud auth configure-docker
-
-      - name: Check if the repository exists
-        id: check_repo
-        run: |
-          if gcloud artifacts repositories describe ${{ vars.REPOSITORY_NAME }} --location=${{ vars.LOCATION }} >/dev/null 2>&1; then
-            echo "::set-output name=exists::true"
-          else
-            echo "::set-output name=exists::false"
-          fi
+        run: gcloud auth configure-docker gcr.io
 
       - name: Build Docker image
         run: |
-          docker build -t docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-image:latest .
+          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-image:latest .
           
       - name: Push Docker image to Artifact Registry
         run: |
-          docker push docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}/my-image:latest
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-image:latest
