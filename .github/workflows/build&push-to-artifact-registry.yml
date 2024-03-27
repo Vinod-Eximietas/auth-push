@@ -33,7 +33,7 @@ jobs:
       - name: Check if the repository exists
         id: check_repo
         run: |
-          if gcloud artifacts repositories describe ${{ env.REPOSITORY_NAME }} --location=${{ env.LOCATION }} >/dev/null 2>&1; then
+          if gcloud artifacts repositories describe ${{ vars.REPOSITORY_NAME }} --location=${{ vars.LOCATION }} >/dev/null 2>&1; then
             echo "::set-output name=exists::true"
           else
             echo "::set-output name=exists::false"
@@ -45,5 +45,4 @@ jobs:
           
       - name: Push Docker image to Artifact Registry
         run: |
-          docker push ${{ env.LOCATION }} -docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY_NAME }}/my-image:tag1
-
+          docker push ${{ vars.LOCATION }}/docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}/my-image:tag1
