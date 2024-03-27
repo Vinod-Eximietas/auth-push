@@ -11,7 +11,7 @@ COPY python.py /app/python.py
 RUN pip install --no-cache-dir pylint
 
 # Run pylint to lint the Python script
-
+EXPOSE 8080
 
 # Define environment variable
 ENV GOOGLE_APPLICATION_CREDENTIALS=/path/to/your/credentials.json
