@@ -38,8 +38,8 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-image:latest .
+          docker build -t ${{ vars.REPOSITORY_NAME }}/${{ secrets.GCP_PROJECT_ID }}/my-image:latest .
           
       - name: Push Docker image to Artifact Registry
         run: |
-          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-image:latest
+          docker push ${{ vars.REPOSITORY_NAME }}/${{ secrets.GCP_PROJECT_ID }}/my-image:latest
