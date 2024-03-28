@@ -12,7 +12,7 @@ RUN groupadd -g 15001 deid_group && \
 COPY python.py /app/python.py
 
 # Install any needed dependencies Run pylint to lint the Python script
-RUN pip install pylint && python.py
+RUN pip install --no-cache-dir pylint
 
 # Expose port 8080 (assuming this is the port your Python application runs on)
 EXPOSE 8080
