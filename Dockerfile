@@ -19,3 +19,6 @@ EXPOSE 8080
 
 # Run the Python script
 CMD ["python", "python.py"]
+
+# Set container user uid/gid
+USER deid_user:deid_group
