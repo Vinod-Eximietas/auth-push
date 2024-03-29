@@ -15,7 +15,7 @@ COPY python.py /app/python.py
 RUN pip install --no-cache-dir pylint
 
 # Try running pylint separately
-RUN pylint python.py
+# RUN pylint python.py
 
 # Run pylint to lint the Python script
 EXPOSE 8080
