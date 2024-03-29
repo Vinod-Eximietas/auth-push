@@ -11,9 +11,11 @@ RUN groupadd -g 15001 deid_group && \
 # Copy the Python script into the container
 COPY python.py /app/python.py
 
-# Install any needed dependencies and run pylint to lint the Python script
-RUN pip install --no-cache-dir pylint && \
-    pylint python.py
+# Install pylint
+RUN pip install --no-cache-dir pylint
+
+# Try running pylint separately
+RUN pylint python.py
 
 # Run pylint to lint the Python script
 EXPOSE 8080
