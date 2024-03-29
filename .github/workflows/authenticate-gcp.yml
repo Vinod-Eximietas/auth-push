@@ -1,6 +1,5 @@
 name: Authenticate with GCP
 
-
 on:
   push:
     branches:
