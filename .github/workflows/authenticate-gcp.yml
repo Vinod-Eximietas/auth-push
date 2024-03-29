@@ -1,9 +1,10 @@
 name: Authenticate with GCP
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["Python Lint and SonarQube Scan"]
+    types:
+     - completed
 
 jobs:
   authenticate:
