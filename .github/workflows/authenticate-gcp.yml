@@ -1,9 +1,8 @@
 name: Authenticate with GCP
 
 on:
-  push:
-    branches:
-      - main
+    push:
+       paths: ['python/**']
 # on:
 #   workflow_run:
 #     workflows: ["Python Lint and SonarQube Scan"]
